@@ -82,6 +82,13 @@
             <version>1.9.5</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>6.8.1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -186,6 +193,40 @@
                                 </goals>
                             </execution>
                         </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>integration-test</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>wagon-maven-plugin</artifactId>
+                        <version>1.0-beta-4</version>
+                        <executions>
+                            <execution>
+                                <id>download-jenkins</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>download-single</goal>
+                                </goals>
+                                <configuration>
+                                    <url>http://mirrors.jenkins-ci.org/war/latest/</url>
+                                    <fromFile>jenkins.war</fromFile>
+                                    <toDir>${project.build.directory}/jenkins</toDir>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>2.16</version>
+                        <configuration>
+                            <groups>functional</groups>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
